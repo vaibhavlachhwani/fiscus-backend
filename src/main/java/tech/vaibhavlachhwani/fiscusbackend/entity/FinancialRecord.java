@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 import tech.vaibhavlachhwani.fiscusbackend.enums.TransactionType;
 
@@ -19,6 +21,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@SQLDelete(sql = "UPDATE financial_records SET is_deleted = true WHERE id=?")
+@SQLRestriction("is_deleted = false")
 public class FinancialRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
