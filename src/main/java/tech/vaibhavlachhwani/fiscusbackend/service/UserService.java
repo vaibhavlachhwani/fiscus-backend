@@ -7,4 +7,5 @@ import tech.vaibhavlachhwani.fiscusbackend.entity.User;
 public interface UserService {
     UserResponseDTO createUser(UserRequestDTO user);
     UserResponseDTO findById(Long id);
+    User getUserEntityById(Long id);
 }
