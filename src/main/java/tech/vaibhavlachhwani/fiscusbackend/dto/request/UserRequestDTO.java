@@ -17,9 +17,6 @@ public class UserRequestDTO {
     @Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
     private String password;
 
-    // Optional: Only include this if the client is allowed to set their own role.
-    // If it's a standard registration form, you might want to remove this from the DTO
-    // and hardcode `Role.USER` in your Service layer instead.
     @NotNull(message = "Role must be specified")
     private Role role;
 }
