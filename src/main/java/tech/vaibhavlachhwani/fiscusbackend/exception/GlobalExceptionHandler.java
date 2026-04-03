@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
                 .message("An unexpected error occurred") // Do not expose exact SQL/Java errors to the client!
                 .path(request.getRequestURI())
                 .build();
-        
+
         System.err.println("CRITICAL ERROR: " + ex.getMessage());
 
         return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);

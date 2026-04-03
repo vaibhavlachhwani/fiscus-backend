@@ -5,6 +5,7 @@ import tech.vaibhavlachhwani.fiscusbackend.dto.request.FinancialRecordRequestDTO
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.FinancialRecordResponseDTO;
 import tech.vaibhavlachhwani.fiscusbackend.entity.FinancialRecord;
 import tech.vaibhavlachhwani.fiscusbackend.entity.User;
+import tech.vaibhavlachhwani.fiscusbackend.exception.ResourceNotFoundException;
 import tech.vaibhavlachhwani.fiscusbackend.repository.FinancialRecordRepository;
 import tech.vaibhavlachhwani.fiscusbackend.service.FinancialRecordService;
 import tech.vaibhavlachhwani.fiscusbackend.service.UserService;
@@ -75,6 +76,6 @@ public class FinancialRecordServiceImpl implements FinancialRecordService {
 
     private FinancialRecord getFinancialRecordEntityById(Long id) {
         return financialRecordRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Financial Record with id: " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Financial Record with id: " + id + " not found"));
     }
 }

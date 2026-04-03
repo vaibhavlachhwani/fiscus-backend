@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserRequestDTO;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.UserResponseDTO;
 import tech.vaibhavlachhwani.fiscusbackend.entity.User;
+import tech.vaibhavlachhwani.fiscusbackend.exception.ResourceNotFoundException;
 import tech.vaibhavlachhwani.fiscusbackend.repository.UserRepository;
 import tech.vaibhavlachhwani.fiscusbackend.service.UserService;
 
@@ -37,6 +38,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserEntityById(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User with id: " + id + " not found."));
+                .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found."));
     }
 }
