@@ -19,12 +19,10 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        // Check if the database is completely empty of users
-        if (userRepository.count() == 0) {
-
+        if (!userRepository.existsByRole(Role.ADMIN)) {
             User genesisAdmin = User.builder()
                     .email("admin@fiscus.com")
-                    .password(passwordEncoder.encode("admin123")) // Remember to hash it!
+                    .password(passwordEncoder.encode("admin123"))
                     .role(Role.ADMIN)
                     .isActive(true)
                     .build();
@@ -32,12 +30,12 @@ public class DatabaseSeeder implements CommandLineRunner {
             userRepository.save(genesisAdmin);
 
             System.out.println("=========================================================");
-            System.out.println("🌱 DATABASE SEEDER: Master Admin created successfully!");
-            System.out.println("👤 Email: admin@fiscus.com");
-            System.out.println("🔑 Password: admin123");
+            System.out.println("DATABASE SEEDER: Master Admin created successfully.");
+            System.out.println("Email: admin@fiscus.com");
+            System.out.println("Password: admin123");
             System.out.println("=========================================================");
         } else {
-            System.out.println("✅ DATABASE SEEDER: Users already exist. Skipping Master Admin creation.");
+            System.out.println("DATABASE SEEDER: Admin account already exists. Skipping genesis creation.");
         }
     }
 }

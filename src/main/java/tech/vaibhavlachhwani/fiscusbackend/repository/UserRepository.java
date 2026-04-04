@@ -3,10 +3,12 @@ package tech.vaibhavlachhwani.fiscusbackend.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import tech.vaibhavlachhwani.fiscusbackend.entity.User;
+import tech.vaibhavlachhwani.fiscusbackend.enums.Role;
 
 import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
+    boolean existsByRole(Role role);
 }
