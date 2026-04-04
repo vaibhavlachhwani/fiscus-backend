@@ -1,6 +1,8 @@
 package tech.vaibhavlachhwani.fiscusbackend.bootstrap;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import tech.vaibhavlachhwani.fiscusbackend.entity.User;
@@ -8,14 +10,11 @@ import tech.vaibhavlachhwani.fiscusbackend.enums.Role;
 import tech.vaibhavlachhwani.fiscusbackend.repository.UserRepository;
 
 @Component
+@Order(1)
+@RequiredArgsConstructor
 public class DatabaseSeeder implements CommandLineRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    public DatabaseSeeder(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public void run(String... args) throws Exception {
