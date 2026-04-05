@@ -2,63 +2,44 @@ package tech.vaibhavlachhwani.fiscusbackend.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tech.vaibhavlachhwani.fiscusbackend.dto.response.CategorySum;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.DashboardSummaryResponseDTO;
 import tech.vaibhavlachhwani.fiscusbackend.enums.TransactionType;
 import tech.vaibhavlachhwani.fiscusbackend.repository.FinancialRecordRepository;
 import tech.vaibhavlachhwani.fiscusbackend.service.DashboardService;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DashboardServiceImpl implements DashboardService {
-    private final FinancialRecordRepository recordRepository;
-
+    private final FinancialRecordRepository financialRecordRepository;
 
     @Override
     public DashboardSummaryResponseDTO getSurvivalMetrics() {
-        LocalDate thirtyDaysAgo = LocalDate.now().minusDays(30);
+        BigDecimal totalIncome = financialRecordRepository.getTotalAmountByType(TransactionType.INCOME);
+        BigDecimal totalExpense = financialRecordRepository.getTotalAmountByType(TransactionType.EXPENSE);
+        BigDecimal netBalance = totalIncome.subtract(totalExpense);
 
-        // 1. Calculate Current Cash Balance (All-Time Income - All-Time Expenses)
-        BigDecimal startingCapital = new BigDecimal("500000.00"); // Assuming a starting capital of 500,000 for realistic startup simulation
-        BigDecimal allTimeIncome = recordRepository.getTotalAmountByType(TransactionType.INCOME);
-        BigDecimal allTimeExpenses = recordRepository.getTotalAmountByType(TransactionType.EXPENSE);
-        BigDecimal currentCashBalance = startingCapital.add(allTimeIncome).subtract(allTimeExpenses);
+        long totalTransactionCount = financialRecordRepository.count();
 
-        // 2. Fetch 30-Day Trailing Metrics
-        BigDecimal grossBurnRate = recordRepository.sumExpensesSince(thirtyDaysAgo);
-        BigDecimal operationalIncome = recordRepository.sumOperationalIncomeSince(thirtyDaysAgo);
-        BigDecimal mrr = recordRepository.calculateMRR(thirtyDaysAgo);
+        Map<String, BigDecimal> incomeByCategory = financialRecordRepository.getIncomeByCategory()
+                .stream()
+                .collect(Collectors.toMap(CategorySum::getCategory, CategorySum::getTotal));
 
-        // 3. Calculate Net Burn Rate (Expenses - Operational Income)
-        BigDecimal netBurnRate = grossBurnRate.subtract(operationalIncome);
+        Map<String, BigDecimal> expenseByCategory = financialRecordRepository.getExpenseByCategory()
+                .stream()
+                .collect(Collectors.toMap(CategorySum::getCategory, CategorySum::getTotal));
 
-        // 4. Determine Runway and Profitability
-        boolean isProfitable = netBurnRate.compareTo(BigDecimal.ZERO) <= 0;
-        BigDecimal runwayMonths = new BigDecimal("-1"); // Default to -1 indicating infinite runway
-        LocalDate zeroCashDate = null;
-
-        if (!isProfitable) {
-            // Runway = Cash Balance / Net Burn Rate
-            // Using RoundingMode.HALF_UP is required when dividing BigDecimals to prevent infinite decimal crashes
-            runwayMonths = currentCashBalance.divide(netBurnRate, 2, RoundingMode.HALF_UP);
-
-            // Calculate approximate Zero Cash Date (Current Date + (Runway Months * 30 days))
-            int daysUntilZero = runwayMonths.multiply(new BigDecimal("30")).intValue();
-            zeroCashDate = LocalDate.now().plusDays(daysUntilZero);
-        }
-
-        // 5. Build and return the DTO
         return DashboardSummaryResponseDTO.builder()
-                .currentCashBalance(currentCashBalance)
-                .grossBurnRate(grossBurnRate)
-                .netBurnRate(netBurnRate)
-                .mrr(mrr)
-                .runwayMonths(runwayMonths)
-                .zeroCashDate(zeroCashDate)
-                .isProfitable(isProfitable)
+                .totalIncome(totalIncome)
+                .totalExpense(totalExpense)
+                .netBalance(netBalance)
+                .totalTransactionCount(totalTransactionCount)
+                .incomeByCategory(incomeByCategory)
+                .expenseByCategory(expenseByCategory)
                 .build();
     }
 }

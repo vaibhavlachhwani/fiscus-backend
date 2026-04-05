@@ -14,9 +14,9 @@ import tech.vaibhavlachhwani.fiscusbackend.service.DashboardService;
 public class DashboardController {
     private final DashboardService dashboardService;
 
-    @GetMapping("/metrics")
-    public ResponseEntity<DashboardSummaryResponseDTO> getSurvivalMetrics() {
-        DashboardSummaryResponseDTO metrics = dashboardService.getSurvivalMetrics();
-        return ResponseEntity.ok(metrics);
+    @GetMapping("/summary")
+    public ResponseEntity<DashboardSummaryResponseDTO> getBusinessSummary() {
+        DashboardSummaryResponseDTO summary = dashboardService.getSurvivalMetrics();
+        return ResponseEntity.ok(summary);
     }
 }
