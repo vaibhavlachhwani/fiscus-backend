@@ -1,5 +1,6 @@
 package tech.vaibhavlachhwani.fiscusbackend.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import tech.vaibhavlachhwani.fiscusbackend.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/api/users")
+@SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 public class UserController {
     private final UserServiceImpl userService;

@@ -1,5 +1,6 @@
 package tech.vaibhavlachhwani.fiscusbackend.controller;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import tech.vaibhavlachhwani.fiscusbackend.service.DashboardService;
 
 @RestController
 @RequestMapping("/api/dashboard")
+@SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 public class DashboardController {
     private final DashboardService dashboardService;
