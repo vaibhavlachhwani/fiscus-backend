@@ -5,6 +5,11 @@
 ### Executive Summary
 A robust, enterprise-grade Spring Boot backend designed for secure management of financial records and real-time dashboard analytics. The system implements granular Role-Based Access Control (RBAC) to ensure data integrity and confidentiality across different user tiers.
 
+> ### 🌐 **Live API Documentation**
+> **[Access Swagger UI](https://fiscus-backend.onrender.com/swagger-ui/index.html)**
+>
+> ⚠️ **Note:** Since this is hosted on a free tier, the initial response may take **50-60 seconds** to load if the service is in a "cold start" state.
+
 ### Technology Matrix
 | Component | Technology | Rationale |
 | :--- | :--- | :--- |
