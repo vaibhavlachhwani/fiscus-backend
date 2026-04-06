@@ -1,5 +1,6 @@
 package tech.vaibhavlachhwani.fiscusbackend.repository;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -35,4 +36,17 @@ public interface FinancialRecordRepository extends JpaRepository<FinancialRecord
     @Query("SELECT f.amount AS amount, f.type AS type, f.category AS category, f.transactionDate AS transactionDate " +
             "FROM FinancialRecord f ORDER BY f.transactionDate DESC, f.createdAt DESC")
     List<RecentTransactionView> getLatestTransactions(Pageable pageable);
+
+    @Query("SELECT f FROM FinancialRecord f WHERE " +
+            "(:type IS NULL OR f.type = :type) AND " +
+            "(:category IS NULL OR f.category = :category) AND " +
+            "(cast(:startDate as date) IS NULL OR f.transactionDate >= :startDate) AND " +
+            "(cast(:endDate as date) IS NULL OR f.transactionDate <= :endDate)")
+    Page<FinancialRecord> findFilteredRecords(
+            @Param("type") TransactionType type,
+            @Param("category") String category,
+            @Param("startDate") LocalDate startDate,
+            @Param("endDate") LocalDate endDate,
+            Pageable pageable
+    );
 }

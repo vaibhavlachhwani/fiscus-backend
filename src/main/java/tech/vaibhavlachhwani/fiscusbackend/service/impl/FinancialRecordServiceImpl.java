@@ -1,5 +1,9 @@
 package tech.vaibhavlachhwani.fiscusbackend.service.impl;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import tech.vaibhavlachhwani.fiscusbackend.dto.request.FinancialRecordRequestDTO;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.FinancialRecordResponseDTO;
@@ -10,6 +14,7 @@ import tech.vaibhavlachhwani.fiscusbackend.repository.FinancialRecordRepository;
 import tech.vaibhavlachhwani.fiscusbackend.service.FinancialRecordService;
 import tech.vaibhavlachhwani.fiscusbackend.service.UserService;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,10 +47,18 @@ public class FinancialRecordServiceImpl implements FinancialRecordService {
     }
 
     @Override
-    public List<FinancialRecordResponseDTO> findAll() {
-        return financialRecordRepository.findAll().stream()
-                .map(FinancialRecordResponseDTO::fromEntity)
-                .collect(Collectors.toList());
+    public Page<FinancialRecordResponseDTO> getFilteredRecords(
+            tech.vaibhavlachhwani.fiscusbackend.enums.TransactionType type,
+            String category,
+            LocalDate startDate,
+            LocalDate endDate,
+            int page,
+            int size) {
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "transactionDate"));
+        Page<FinancialRecord> records = financialRecordRepository.findFilteredRecords(type, category, startDate, endDate, pageable);
+
+        return records.map(FinancialRecordResponseDTO::fromEntity);
     }
 
     @Override

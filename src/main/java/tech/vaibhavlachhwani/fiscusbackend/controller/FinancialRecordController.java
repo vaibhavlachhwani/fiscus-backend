@@ -3,13 +3,16 @@ package tech.vaibhavlachhwani.fiscusbackend.controller;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.vaibhavlachhwani.fiscusbackend.dto.request.FinancialRecordRequestDTO;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.FinancialRecordResponseDTO;
+import tech.vaibhavlachhwani.fiscusbackend.enums.TransactionType;
 import tech.vaibhavlachhwani.fiscusbackend.service.impl.FinancialRecordServiceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,8 +29,17 @@ public class FinancialRecordController {
     }
 
     @GetMapping
-    public ResponseEntity<List<FinancialRecordResponseDTO>> getAllRecords() {
-        return ResponseEntity.ok(recordService.findAll());
+    public ResponseEntity<Page<FinancialRecordResponseDTO>> getAllRecords(
+            @RequestParam(required = false) TransactionType type,
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) LocalDate startDate,
+            @RequestParam(required = false) LocalDate endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        Page<FinancialRecordResponseDTO> response = recordService
+                .getFilteredRecords(type, category, startDate, endDate, page, size);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
