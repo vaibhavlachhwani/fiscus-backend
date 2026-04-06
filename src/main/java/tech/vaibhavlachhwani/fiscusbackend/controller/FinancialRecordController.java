@@ -11,7 +11,6 @@ import tech.vaibhavlachhwani.fiscusbackend.dto.request.FinancialRecordRequestDTO
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.FinancialRecordResponseDTO;
 import tech.vaibhavlachhwani.fiscusbackend.enums.TransactionType;
 import tech.vaibhavlachhwani.fiscusbackend.service.FinancialRecordService;
-import tech.vaibhavlachhwani.fiscusbackend.service.impl.FinancialRecordServiceImpl;
 
 import java.time.LocalDate;
 import java.util.List;

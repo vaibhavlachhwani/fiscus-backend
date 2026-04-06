@@ -7,9 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserRequestDTO;
+import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserRoleUpdateRequestDTO;
+import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserStatusUpdateRequestDTO;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.UserResponseDTO;
 import tech.vaibhavlachhwani.fiscusbackend.service.UserService;
-import tech.vaibhavlachhwani.fiscusbackend.service.impl.UserServiceImpl;
 
 @RestController
 @RequestMapping("/api/users")
@@ -28,5 +29,21 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {
         UserResponseDTO user = userService.findById(id);
         return ResponseEntity.ok(user);
+    }
+
+    @PatchMapping("/{id}/role")
+    public ResponseEntity<UserResponseDTO> updateUserRole(
+            @PathVariable Long id,
+            @Valid @RequestBody UserRoleUpdateRequestDTO request) {
+        UserResponseDTO updatedUser = userService.updateUserRole(id, request);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<UserResponseDTO> updateUserStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody UserStatusUpdateRequestDTO request) {
+        UserResponseDTO updatedUser = userService.updateUserStatus(id, request);
+        return ResponseEntity.ok(updatedUser);
     }
 }

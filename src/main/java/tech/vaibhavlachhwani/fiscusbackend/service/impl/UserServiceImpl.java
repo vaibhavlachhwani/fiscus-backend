@@ -1,9 +1,12 @@
 package tech.vaibhavlachhwani.fiscusbackend.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserRequestDTO;
+import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserRoleUpdateRequestDTO;
+import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserStatusUpdateRequestDTO;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.UserResponseDTO;
 import tech.vaibhavlachhwani.fiscusbackend.entity.User;
 import tech.vaibhavlachhwani.fiscusbackend.exception.ResourceNotFoundException;
@@ -41,5 +44,33 @@ public class UserServiceImpl implements UserService {
     public User getUserEntityById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User with id: " + id + " not found."));
+    }
+
+    @Override
+    public UserResponseDTO updateUserRole(Long id, UserRoleUpdateRequestDTO request) {
+        User userToUpdate = getUserEntityById(id);
+        validateNotSelfModification(userToUpdate.getEmail(), "demote or change your own role");
+
+        userToUpdate.setRole(request.getRole());
+        User updatedUser = userRepository.save(userToUpdate);
+        return UserResponseDTO.fromEntity(updatedUser);
+    }
+
+    @Override
+    public UserResponseDTO updateUserStatus(Long id, UserStatusUpdateRequestDTO request) {
+        User userToUpdate = getUserEntityById(id);
+        validateNotSelfModification(userToUpdate.getEmail(), "disable your own account");
+
+        userToUpdate.setIsActive(request.getIsActive());
+        User updatedUser = userRepository.save(userToUpdate);
+        return UserResponseDTO.fromEntity(updatedUser);
+    }
+
+    // Private helper to prevent the Genesis Lockout
+    private void validateNotSelfModification(String targetUserEmail, String actionDescription) {
+        String currentLoggedInEmail = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (targetUserEmail.equals(currentLoggedInEmail)) {
+            throw new IllegalStateException("Security Violation: You cannot " + actionDescription + ".");
+        }
     }
 }
