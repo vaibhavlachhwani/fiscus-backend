@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tech.vaibhavlachhwani.fiscusbackend.dto.request.UserRequestDTO;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.UserResponseDTO;
+import tech.vaibhavlachhwani.fiscusbackend.service.UserService;
 import tech.vaibhavlachhwani.fiscusbackend.service.impl.UserServiceImpl;
 
 @RestController
@@ -15,7 +16,7 @@ import tech.vaibhavlachhwani.fiscusbackend.service.impl.UserServiceImpl;
 @SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @PostMapping
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO request) {

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import tech.vaibhavlachhwani.fiscusbackend.dto.request.FinancialRecordRequestDTO;
 import tech.vaibhavlachhwani.fiscusbackend.dto.response.FinancialRecordResponseDTO;
 import tech.vaibhavlachhwani.fiscusbackend.enums.TransactionType;
+import tech.vaibhavlachhwani.fiscusbackend.service.FinancialRecordService;
 import tech.vaibhavlachhwani.fiscusbackend.service.impl.FinancialRecordServiceImpl;
 
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ import java.util.List;
 @SecurityRequirement(name = "Bearer Authentication")
 @RequiredArgsConstructor
 public class FinancialRecordController {
-    private final FinancialRecordServiceImpl recordService;
+    private final FinancialRecordService recordService;
 
     @PostMapping
     public ResponseEntity<FinancialRecordResponseDTO> createRecord(@Valid @RequestBody FinancialRecordRequestDTO recordDto) {
