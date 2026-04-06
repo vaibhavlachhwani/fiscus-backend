@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -18,6 +19,12 @@ public class DashboardSummaryResponseDTO {
     private BigDecimal totalExpense;
     private BigDecimal netBalance;
     private long totalTransactionCount;
+
     private Map<String, BigDecimal> incomeByCategory;
     private Map<String, BigDecimal> expenseByCategory;
+
+    private BigDecimal currentMonthIncome;
+    private BigDecimal currentMonthExpense;
+
+    private List<RecentTransactionView> recentTransactions;
 }
